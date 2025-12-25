@@ -29,7 +29,7 @@ suite('Extension Test Suite', () => {
   test('アスキーアート設定がデフォルト値を持つ', () => {
     const config = vscode.workspace.getConfiguration('startBoard.asciiArt');
 
-    assert.strictEqual(config.get('text'), 'Welcome', 'textのデフォルト値');
+    assert.strictEqual(config.get('text'), 'Welcome\nto\nStart Board', 'textのデフォルト値');
     assert.strictEqual(config.get('fontFamily'), 'monospace', 'fontFamilyのデフォルト値');
     assert.strictEqual(config.get('fontSize'), 14, 'fontSizeのデフォルト値');
     assert.strictEqual(config.get('lineHeight'), 1.2, 'lineHeightのデフォルト値');

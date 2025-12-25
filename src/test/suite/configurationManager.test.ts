@@ -34,7 +34,7 @@ suite('ConfigurationManager Test Suite', () => {
     test('デフォルト設定値が正しく返される', () => {
       const config = configManager.getAsciiArtConfig();
 
-      assert.strictEqual(config.text, 'Welcome');
+      assert.strictEqual(config.text, 'Welcome\nto\nStart Board');
       assert.strictEqual(config.fontFamily, 'monospace');
       assert.strictEqual(config.fontSize, 14);
       assert.strictEqual(config.lineHeight, 1.2);
@@ -142,7 +142,7 @@ suite('ConfigurationManager Test Suite', () => {
     test('DEFAULT_CONFIG定数が正しい値を持つ', () => {
       const defaults = ConfigurationManager.DEFAULT_CONFIG;
 
-      assert.strictEqual(defaults.text, 'Welcome');
+      assert.strictEqual(defaults.text, 'Welcome\nto\nStart Board');
       assert.strictEqual(defaults.fontFamily, 'monospace');
       assert.strictEqual(defaults.fontSize, 14);
       assert.strictEqual(defaults.lineHeight, 1.2);

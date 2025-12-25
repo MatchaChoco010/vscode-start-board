@@ -120,7 +120,7 @@ suite('Message Integration Test Suite', () => {
     if (initMessage.type === 'init') {
       assert.ok(Array.isArray(initMessage.projects), 'projects が配列');
       assert.ok(initMessage.config, 'config が存在');
-      assert.strictEqual(initMessage.config.text, 'Welcome', 'デフォルトのテキスト');
+      assert.strictEqual(initMessage.config.text, 'Welcome\nto\nStart Board', 'デフォルトのテキスト');
     }
   });
 
@@ -177,19 +177,33 @@ suite('Message Integration Test Suite', () => {
     await webviewManager.showDashboard();
     postedMessages = [];
 
-    // confirmDelete メッセージを送信
-    messageEvent.fire({ type: 'confirmDelete', projectId: project!.id, projectName: project!.name });
+    // vscode.window.showWarningMessage をモック
+    const originalShowWarningMessage = vscode.window.showWarningMessage;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (vscode.window as any).showWarningMessage = async () => '削除';
 
-    assert.strictEqual(postedMessages.length, 1, 'projectsUpdated メッセージが送信される');
-    assert.strictEqual(postedMessages[0].type, 'projectsUpdated');
+    try {
+      // confirmDelete メッセージを送信
+      messageEvent.fire({ type: 'confirmDelete', projectId: project!.id, projectName: project!.name });
 
-    const updateMessage = postedMessages[0];
-    if (updateMessage.type === 'projectsUpdated') {
-      assert.strictEqual(updateMessage.projects.length, 0, 'プロジェクトが削除されている');
+      // 非同期処理の完了を待つ
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      assert.strictEqual(postedMessages.length, 1, 'projectsUpdated メッセージが送信される');
+      assert.strictEqual(postedMessages[0].type, 'projectsUpdated');
+
+      const updateMessage = postedMessages[0];
+      if (updateMessage.type === 'projectsUpdated') {
+        assert.strictEqual(updateMessage.projects.length, 0, 'プロジェクトが削除されている');
+      }
+
+      // ストレージからも削除されていることを確認
+      assert.strictEqual(projectStorage.getProjects().length, 0);
+    } finally {
+      // モックを元に戻す
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (vscode.window as any).showWarningMessage = originalShowWarningMessage;
     }
-
-    // ストレージからも削除されていることを確認
-    assert.strictEqual(projectStorage.getProjects().length, 0);
   });
 
   test('設定変更時に configUpdated メッセージを送信する', async () => {
