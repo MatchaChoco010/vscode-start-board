@@ -178,7 +178,8 @@ export class WebviewManager {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
       box-sizing: border-box;
     }
     .splash-container {
@@ -194,6 +195,25 @@ export class WebviewManager {
       flex: 1 1 auto;
       width: 100%;
       max-width: 600px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--vscode-scrollbarSlider-background) transparent;
+    }
+    .project-list-container::-webkit-scrollbar {
+      width: 10px;
+    }
+    .project-list-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .project-list-container::-webkit-scrollbar-thumb {
+      background: var(--vscode-scrollbarSlider-background);
+      border-radius: 5px;
+    }
+    .project-list-container::-webkit-scrollbar-thumb:hover {
+      background: var(--vscode-scrollbarSlider-hoverBackground);
+    }
+    .project-list-container::-webkit-scrollbar-thumb:active {
+      background: var(--vscode-scrollbarSlider-activeBackground);
     }
     .project-list-title {
       font-size: 1.2em;

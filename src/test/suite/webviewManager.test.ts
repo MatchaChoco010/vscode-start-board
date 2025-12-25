@@ -300,6 +300,55 @@ suite('WebviewManager Test Suite', () => {
       assert.ok(html.includes('class="project-list-container"'), 'HTML should contain project list container');
     });
 
+    test('HTML body has fixed height and overflow hidden', async () => {
+      const manager = new WebviewManager(extensionUri, () => mockPanel);
+      await manager.showDashboard();
+
+      const html = mockPanel.webview.html;
+      assert.ok(html.includes('height: 100vh'), 'Body should have height: 100vh for fixed viewport height');
+      assert.ok(html.includes('overflow: hidden'), 'Body should have overflow: hidden to disable page scroll');
+    });
+
+    test('HTML project-list-container has overflow-y auto', async () => {
+      const manager = new WebviewManager(extensionUri, () => mockPanel);
+      await manager.showDashboard();
+
+      const html = mockPanel.webview.html;
+      assert.ok(html.includes('overflow-y: auto'), 'Project list container should have overflow-y: auto for vertical scrolling');
+    });
+
+    test('HTML has standard scrollbar styles', async () => {
+      const manager = new WebviewManager(extensionUri, () => mockPanel);
+      await manager.showDashboard();
+
+      const html = mockPanel.webview.html;
+      assert.ok(html.includes('scrollbar-width: thin'), 'Should have scrollbar-width: thin for standard scrollbar');
+      assert.ok(html.includes('scrollbar-color:'), 'Should have scrollbar-color property');
+      assert.ok(html.includes('--vscode-scrollbarSlider-background'), 'Should use VSCode scrollbar theme variable');
+    });
+
+    test('HTML has webkit scrollbar styles', async () => {
+      const manager = new WebviewManager(extensionUri, () => mockPanel);
+      await manager.showDashboard();
+
+      const html = mockPanel.webview.html;
+      assert.ok(html.includes('::-webkit-scrollbar'), 'Should have webkit scrollbar styles');
+      assert.ok(html.includes('::-webkit-scrollbar-track'), 'Should have webkit scrollbar track styles');
+      assert.ok(html.includes('::-webkit-scrollbar-thumb'), 'Should have webkit scrollbar thumb styles');
+      assert.ok(html.includes('::-webkit-scrollbar-thumb:hover'), 'Should have webkit scrollbar thumb hover styles');
+      assert.ok(html.includes('::-webkit-scrollbar-thumb:active'), 'Should have webkit scrollbar thumb active styles');
+    });
+
+    test('HTML scrollbar uses VSCode theme variables', async () => {
+      const manager = new WebviewManager(extensionUri, () => mockPanel);
+      await manager.showDashboard();
+
+      const html = mockPanel.webview.html;
+      assert.ok(html.includes('--vscode-scrollbarSlider-background'), 'Should use --vscode-scrollbarSlider-background');
+      assert.ok(html.includes('--vscode-scrollbarSlider-hoverBackground'), 'Should use --vscode-scrollbarSlider-hoverBackground');
+      assert.ok(html.includes('--vscode-scrollbarSlider-activeBackground'), 'Should use --vscode-scrollbarSlider-activeBackground');
+    });
+
     test('HTML uses VSCode theme variables', async () => {
       const manager = new WebviewManager(extensionUri, () => mockPanel);
       await manager.showDashboard();

@@ -106,7 +106,7 @@ export function activate(context: vscode.ExtensionContext): void {
         // プロジェクトを開く
         handleOpenProject(message.projectId, projectStorage, webviewManager);
         break;
-      case 'confirmDelete':
+      case 'confirmDelete': {
         // VSCodeの確認ダイアログを表示
         const confirmation = await vscode.window.showWarningMessage(
           `「${message.projectName}」を削除しますか？`,
@@ -124,6 +124,7 @@ export function activate(context: vscode.ExtensionContext): void {
           });
         }
         break;
+      }
     }
   });
   context.subscriptions.push(messageHandler);

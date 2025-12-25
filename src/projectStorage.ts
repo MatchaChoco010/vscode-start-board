@@ -1,4 +1,5 @@
 import { Project, ProjectInput } from './types';
+import { sortProjectsAlphabetically } from './projectSorter';
 
 /**
  * globalStateのインターフェース（テスト用に抽象化）
@@ -41,8 +42,8 @@ export class ProjectStorage {
   }
 
   /**
-   * 全てのプロジェクトを取得する
-   * @returns プロジェクト配列
+   * 全てのプロジェクトをソート済みで取得する
+   * @returns ソート済みプロジェクト配列（アルファベット順）
    */
   getProjects(): Project[] {
     const projects = this.globalState.get<Project[]>(STORAGE_KEY);
@@ -53,7 +54,8 @@ export class ProjectStorage {
     if (!Array.isArray(projects)) {
       return [];
     }
-    return projects;
+    // プロジェクトリストをアルファベット順にソートして返す
+    return sortProjectsAlphabetically(projects);
   }
 
   /**
